@@ -79,7 +79,18 @@ public class TaskManager {
     }
 
     public void deleteAllSubtasks() {
+        for (Subtask subtask : subtasks.values()) {
+            Epic epic = epics.get(subtask.getEpicId());
+            if (epic != null) {
+                epic.removeSubtaskId(subtask.getId());
+            }
+        }
+
         subtasks.clear();
+
+        for (Epic epic : epics.values()) {
+            epic.setStatus(TaskStatus.NEW);
+        }
     }
 
     // Методы для эпиков
@@ -114,8 +125,9 @@ public class TaskManager {
     }
 
     public void deleteEpics() {
-        epics.clear();
+        subtasks.clear();
 
+        epics.clear();
     }
 
     // Обновление статуса эпика
